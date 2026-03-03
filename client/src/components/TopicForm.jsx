@@ -54,7 +54,10 @@ function TopicForm({ setResult, setLoading, loading, setError }) {
         />
       </div>
       <motion.button
-        className={`w-full mt-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-3 transition ${loading ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-linear-to-br from-white to-gray-200 text-black shadow-[0_15px_35px_rgba(0,0,0,0.4)]"}`}
+        whileHover={!loading ? { scale: 1.02 } : {}}
+        whileTap={!loading ? { scale: 0.95 } : {}}
+        disabled={loading}
+        className={`w-full mt-4 py-3 rounded-xl font-semibold cursor-pointer flex items-center justify-center gap-3 transition ${loading ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-linear-to-br from-white to-gray-200 text-black shadow-[0_15px_35px_rgba(0,0,0,0.4)]"}`}
       >
         {loading ? "Generating Notes..." : "Generate Notes"}
       </motion.button>
