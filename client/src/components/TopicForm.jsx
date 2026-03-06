@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { generateNotes } from "../services/api";
+import { useEffect } from "react";
 
 function TopicForm({ setResult, setLoading, loading, setError }) {
   const [topic, setTopic] = useState("");
@@ -9,6 +10,8 @@ function TopicForm({ setResult, setLoading, loading, setError }) {
   const [revisionMode, setRevisionMode] = useState(false);
   const [includeDiagram, setIncludeDiagram] = useState(false);
   const [includeChart, setIncludeChart] = useState(false);
+  const [progress, setProgress] = useState("");
+  const [progressText, setProgressText] = useState("");
 
   const handleSubmit = async () => {
     if (!topic.trim()) {
@@ -35,6 +38,35 @@ function TopicForm({ setResult, setLoading, loading, setError }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!loading) {
+      setProgress(0);
+      setProgressText("");
+      return;
+    }
+    let value = 0;
+
+    const interval = setInterval(() => {
+      value += Math.random() * 8;
+
+      if (value >= 95) {
+        value = 95;
+        setProgressText("Almost done...");
+        clearInterval(interval);
+      } else if (value > 70) {
+        setProgressText("Finalizing notes...");
+      } else if (value > 40) {
+        setProgressText("Processing content...");
+      } else {
+        setProgressText("Generating notes...");
+      }
+
+      setProgress(Math.floor(value));
+    }, 700);
+
+    return () => clearInterval(interval);
+  }, [loading]);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -89,6 +121,8 @@ function TopicForm({ setResult, setLoading, loading, setError }) {
       >
         {loading ? "Generating Notes..." : "Generate Notes"}
       </motion.button>
+
+      {loading && <div className="mt-4 space-y-2"></div>}
     </motion.div>
   );
 }

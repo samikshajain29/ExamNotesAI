@@ -1,5 +1,5 @@
 import express from "express";
-import isAuth from "../middlewares/isAuth";
+import isAuth from "../middlewares/isAuth.js";
 import { generateNotes } from "../controllers/generateController.js";
 
 const notesRouter = express.Router();

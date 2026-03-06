@@ -16,7 +16,7 @@ export const generateNotes = async (req, res) => {
     if (!topic) {
       return res.status(400).json({ message: "Topic is required" });
     }
-    const user = await User.findOne(req.userId);
+    const user = await User.findById(req.userId);
     if (!user) {
       return res.status(400).json({ message: "User is not found" });
     }
@@ -60,7 +60,7 @@ export const generateNotes = async (req, res) => {
 
     return res.status(200).json({
       data: aiResponse,
-      noteId: note._id,
+      noteId: notes._id,
       creditsLeft: user.credits,
     });
   } catch (error) {

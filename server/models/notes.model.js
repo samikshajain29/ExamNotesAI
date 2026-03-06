@@ -12,7 +12,7 @@ const notesSchema = new mongoose.Schema(
       required: true,
     },
     classLevel: String,
-    examType: Sttring,
+    examType: String,
     revisionMode: {
       type: Boolean,
       default: false,
