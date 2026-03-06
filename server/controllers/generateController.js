@@ -35,7 +35,7 @@ export const generateNotes = async (req, res) => {
       includeChart,
     });
 
-    const aiResponse = generateGeminiResponse(prompt);
+    const aiResponse = await generateGeminiResponse(prompt);
 
     const notes = await Notes.create({
       user: user._id,
