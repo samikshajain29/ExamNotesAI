@@ -55,7 +55,7 @@ function Sidebar({ result }) {
             Short Questions
           </p>
           <ul className="list-disc ml-4 text-sm text-gray-700 space-y-1">
-            {results.questions.short.map((t, i) => (
+            {result.questions.short.map((t, i) => (
               <li key={i}>{t}</li>
             ))}
           </ul>
@@ -66,7 +66,7 @@ function Sidebar({ result }) {
             Long Questions
           </p>
           <ul className="list-disc ml-4 text-sm text-gray-700 space-y-1">
-            {results.questions.long.map((t, i) => (
+            {result.questions.long.map((t, i) => (
               <li key={i}>{t}</li>
             ))}
           </ul>

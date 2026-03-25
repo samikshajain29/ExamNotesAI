@@ -9,18 +9,19 @@ mermaid.initialize({
 const cleanMermaidChart = (diagram) => {
   if (!diagram) return "";
 
-  let clean = diagram
-    .replace(/\r?\n/g, "\n")
-    .replace(/\//g, " ")
-    .replace(/\(/g, "")
-    .replace(/\)/g, "")
-    .replace(/:/g, "")
-    .replace(/,/g, "");
-
-  if (!clean.trim().startsWith("graph")) {
+  let clean = diagram.replace(/\r\n/g, "\n").trim();
+  if (!clean.startsWith("graph")) {
     clean = `graph TD\n${clean}`;
   }
   return clean;
+};
+
+const autoFixBadNodes = (diagram) => {
+  let index = 0;
+  return diagram.replace(/\[(.*?)\]/g, (_, label) => {
+    index++;
+    return `N${index}[${label}]`;
+  });
 };
 
 function MermaidSetup({ diagram }) {
@@ -35,7 +36,7 @@ function MermaidSetup({ diagram }) {
 
         const uniqueId = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
 
-        const safeChart = cleanMermaidChart(diagram);
+        const safeChart = autoFixBadNodes(cleanMermaidChart(diagram));
 
         const { svg } = await mermaid.render(uniqueId, safeChart);
 
