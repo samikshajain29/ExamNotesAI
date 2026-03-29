@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { GiHamburgerMenu } from "react-icons/gi";
+import FinalResult from "../components/FinalResult";
 
 function History() {
   const navigate = useNavigate();
@@ -14,6 +15,9 @@ function History() {
   const credits = userData.credits;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topics, setTopics] = useState([]);
+
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const myNotes = async () => {
       try {
@@ -28,6 +32,20 @@ function History() {
     };
     myNotes();
   }, []);
+
+  const openNotes = async (noteId) => {
+    setLoading(true);
+    try {
+      const res = await axios.get(serverUrl + `/api/notes/${noteId}`, {
+        withCredentials: true,
+      });
+      setSelectedNote(res.data.content);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (window.innerWidth >= 1024) {
@@ -113,12 +131,32 @@ function History() {
                   {topics.map((t, i) => (
                     <li
                       key={i}
+                      onClick={() => {
+                        openNotes(t._id);
+                      }}
                       className="cursor-pointer rounded-xl p-3 bg-white/5 border border-white/10 hover:bg-white/10"
                     >
                       <p className="text-sm font-semibold text-white">
                         {t.topic}
                       </p>
-                      <div></div>
+                      <div className="flex flex-wrap gap-2 mt-2 text-xs">
+                        {t.classLevel && (
+                          <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">
+                            ClassLevel: {t.classLevel}
+                          </span>
+                        )}
+                        {t.examType && (
+                          <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
+                            ClassLevel: {t.examType}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex gap-3 mt-2 text-xs text-gray-300">
+                        {t.revisionMode && <span>⚡Revision</span>}
+                        {t.includeDiagram && <span>📊 Diagram</span>}
+                        {t.includeChart && <span>📈 Chart</span>}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -126,6 +164,23 @@ function History() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="lg:col-span-3 rounded-2xl bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] p-6 min-h-[75vh]"
+        >
+          {loading && (
+            <p className="text-center text-gray-500">Loading Notes...</p>
+          )}
+          {!loading && !selectedNote && (
+            <div className="h-full flex items-center justify-center text-gray-400">
+              Select a topic from the Sidebar
+            </div>
+          )}
+          {!loading && selectedNote && <FinalResult result={selectedNote} />}
+        </motion.div>
       </div>
     </div>
   );
