@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 function Pricing() {
   const navigate = useNavigate();
@@ -12,7 +14,19 @@ function Pricing() {
     try {
       setPayingAmount(amount);
       setPaying(true);
-    } catch (error) {}
+      const result = await axios.post(
+        serverUrl + "/api/credit/order",
+        { amount },
+        { withCredentials: true },
+      );
+      if (result.data.url) {
+        window.location.href = result.data.url;
+      }
+      setPaying(false);
+    } catch (error) {
+      setPaying(false);
+      console.log(error);
+    }
   };
 
   return (

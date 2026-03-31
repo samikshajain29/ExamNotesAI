@@ -1,5 +1,7 @@
 import Stripe from "stripe";
 import User from "../models/user.model.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
