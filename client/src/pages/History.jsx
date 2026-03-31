@@ -15,6 +15,7 @@ function History() {
   const credits = userData.credits;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [topics, setTopics] = useState([]);
+  const [activeNoteId, setActiveNoteId] = useState(null);
 
   const [selectedNote, setSelectedNote] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ function History() {
 
   const openNotes = async (noteId) => {
     setLoading(true);
+    setActiveNoteId(noteId);
     try {
       const res = await axios.get(serverUrl + `/api/notes/${noteId}`, {
         withCredentials: true,
@@ -134,7 +136,7 @@ function History() {
                       onClick={() => {
                         openNotes(t._id);
                       }}
-                      className="cursor-pointer rounded-xl p-3 bg-white/5 border border-white/10 hover:bg-white/10"
+                      className={`cursor-pointer rounded-xl p-3 border transition-all ${activeNoteId === t._id ? "bg-indigo-500/30 border-indigo-400 shadow-[0_0_0_1px_rgba(99,102,241,0.6)]" : "bg-white/5 border-white/10 hover:bg-white/10"}`}
                     >
                       <p className="text-sm font-semibold text-white">
                         {t.topic}
