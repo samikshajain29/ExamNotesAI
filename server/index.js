@@ -7,10 +7,18 @@ import cors from "cors";
 import userRouter from "./routes/userRoutes.js";
 import notesRouter from "./routes/generateRoutes.js";
 import pdfRouter from "./routes/pdfRoutes.js";
+import creditRouter from "./routes/creditsRoutes.js";
+import { stripeWebhook } from "./controllers/creditsController.js";
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
+
+app.post(
+  "/api/credits/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook,
+);
 
 app.use(
   cors({
@@ -27,6 +35,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/notes", notesRouter);
 app.use("/api/pdf", pdfRouter);
+app.use("/api/credit", creditRouter);
 
 app.listen(port, () => {
   connectDb();
