@@ -56,25 +56,25 @@ An AI-powered notes generator that creates structured notes for any topic and di
 
 ## ⚙️ Installation & Setup
 
-# Clone the repository
+### Clone the repository
 ``` bash
 git clone https://github.com/your-username/your-repo-name.git
 
 ```
 
-# Navigate to project folder
+### Navigate to project folder
 ```bash
 cd your-repo-name
 
 ```
 
-# Install dependencies
+### Install dependencies
 ``` bash
 npm install
 
 ```
 
-# Start the server
+### Start the server
 ``` bash
 npm run dev
 
